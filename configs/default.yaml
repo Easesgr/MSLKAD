@@ -1,0 +1,55 @@
+---
+  name: 'MSLKAD'
+  home_dir: '.'
+  reset: false
+  resume: false
+  debug: false
+  run: true
+  load: None
+  load_model: '1'
+# 数据参数
+  data:
+    train_data_root: '/Users/anyi/Data/Rain200H/train'
+    val_data_root: '/Users/anyi/2024Code/MSLKAD/test'
+    patch_size: 128
+    batch_size: 8
+    custom_data_path: null
+    n_threads: 8
+    preprocess: true
+    max_evaluation_count: 10
+    test_data: Rain200H
+
+# 训练参数
+  train:
+    chop: false
+    test_only: false
+    save_results: false
+    save_dir: '/Users/anyi/2024Code/MSLKAD/pre'
+    gpus: 0,1,2,3
+    vgg_model_path: '/Users/anyi/2024Code/MSLKAD/pre/vgg19.pth'
+    max_iter: 400000
+    print_loss: 100
+    print_lr: 10000
+# 系统参数
+  sys:
+    log: true
+    seed: 1
+    cpu: false
+# 模型参数
+  model:
+    MSLKAD:
+      model_name: 'MSLKAD'
+      model_args:
+        n_resblocks: 9
+        n_resgroups: 4
+        n_feats: 180
+      optim_args:
+        type: AdamW
+        lr: !!float 1e-4
+        weight_decay: !!float 1e-4
+        betas: [ 0.9, 0.999 ]
+      ema_decay: 0.999
+      scheduler:
+        type: MultiStepLR
+        milestones: [213000, 319000, 372000, 400000]
+        gamma: 0.5
