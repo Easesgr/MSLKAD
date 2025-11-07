@@ -19,7 +19,7 @@ This code was tested with the following environment configurations. It may work 
 torchrun --nproc_per_node=4 --master_port=2222 main.py 
 
 # training with a single GPU
-python main.py -opt options/train_DFSSM_on_Rain200H.yml
+python main.py 
 ```
 
 ### Testing
