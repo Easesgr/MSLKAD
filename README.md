@@ -1,6 +1,6 @@
 # MSLKAD
 
-The main code and path files of MSLKAD have been uploaded, while the /models module is not yet included. The pretrained models are already available, and the remaining files, including the models module and the improved test.py code, will be supplemented after the paper is accepted.
+The main code and path files of MSLKAD have been uploaded, while the **/models** module is not yet included. The **pretrained models** are already available, and the remaining files, including the models module and the improved **test.py** code, will be supplemented after the paper is accepted.
 
 ## Usage
 
