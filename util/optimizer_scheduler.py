@@ -1,5 +1,5 @@
 import torch.optim as optim
-from torch.optim.lr_scheduler import MultiStepLR, StepLR, ExponentialLR
+from torch.optim.lr_scheduler import CosineAnnealingLR, MultiStepLR, StepLR, ExponentialLR
 def initialize_optimizer(args,model,model_name):
 
     optim_g_params = args.model[model_name].optim_args
@@ -36,7 +36,13 @@ def initialize_scheduler(args,optimizer,model_name):
     scheduler_params = args.model[model_name].scheduler
 
     # 根据调度器类型选择不同的调度器
-    if scheduler_params['type'] == 'MultiStepLR':
+    if scheduler_params['type'] == 'CosineAnnealingLR':
+        scheduler = CosineAnnealingLR(
+            optimizer,
+            T_max=scheduler_params.get('T_max', args.train.max_iter),
+            eta_min=scheduler_params['eta_min'],
+        )
+    elif scheduler_params['type'] == 'MultiStepLR':
         scheduler = MultiStepLR(
             optimizer,
             milestones=scheduler_params['milestones'],

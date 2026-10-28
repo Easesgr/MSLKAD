@@ -24,9 +24,9 @@ PrettySafeLoader.add_constructor(
     PrettySafeLoader.construct_python_tuple)
 
 class AttrDict(dict):
-    def __init__(self, d={}):
+    def __init__(self, d=None):
         super(AttrDict, self).__init__()
-        for k, v in d.items():
+        for k, v in (d or {}).items():
             self.__setitem__(k, v)
 
     def __setitem__(self, k, v):
@@ -47,7 +47,7 @@ def attr_to_dict(attr):
     '''
         Transforms attr string to nested dict
     '''
-    nested_k, v = attr.split('=')
+    nested_k, v = attr.split('=', 1)
     ks = nested_k.split('.')
     d = {}
     ref = d
@@ -99,11 +99,10 @@ def merge_dict(a, b):
 
 def read_yaml(filepath):
     with open(filepath, 'r',encoding='utf-8') as stream:
-        try:
-            return yaml.load(stream, Loader=PrettySafeLoader)
-        except yaml.YAMLError as exc:
-            logger.error(exc)
-            return {}
+        result = yaml.load(stream, Loader=PrettySafeLoader)
+    if not isinstance(result, dict):
+        raise ValueError(f'YAML configuration must be a mapping: {filepath}')
+    return result
 
 def get_args():
     args = {}
@@ -113,10 +112,10 @@ def get_args():
         for arg in sys.argv[1:]:
             if arg.endswith('.yaml'):
                 args = merge_dict(args, read_yaml(arg))
-            elif len(arg.split('=')) == 2:
+            elif '=' in arg:
                 args = merge_dict(args, attr_to_dict(arg))
             else:
-                logger.warning(f'unrecognizable argument: {arg}')
+                raise ValueError(f'Unrecognized argument: {arg}. Use key=value or a YAML file path.')
     return args
 
 # 计算总参数

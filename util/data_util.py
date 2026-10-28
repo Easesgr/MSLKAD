@@ -15,14 +15,14 @@ def augment_pair(lr_img, gt_img, patch_size):
 
     # 如果图像尺寸小于 patch_size，进行 resize 操作
     if width < patch_size and height < patch_size:
-        lr_img = lr_img.resize((patch_size, patch_size), Image.ANTIALIAS)
-        gt_img = gt_img.resize((patch_size, patch_size), Image.ANTIALIAS)
+        lr_img = lr_img.resize((patch_size, patch_size), Image.Resampling.LANCZOS)
+        gt_img = gt_img.resize((patch_size, patch_size), Image.Resampling.LANCZOS)
     elif width < patch_size:
-        lr_img = lr_img.resize((patch_size, height), Image.ANTIALIAS)
-        gt_img = gt_img.resize((patch_size, height), Image.ANTIALIAS)
+        lr_img = lr_img.resize((patch_size, height), Image.Resampling.LANCZOS)
+        gt_img = gt_img.resize((patch_size, height), Image.Resampling.LANCZOS)
     elif height < patch_size:
-        lr_img = lr_img.resize((width, patch_size), Image.ANTIALIAS)
-        gt_img = gt_img.resize((width, patch_size), Image.ANTIALIAS)
+        lr_img = lr_img.resize((width, patch_size), Image.Resampling.LANCZOS)
+        gt_img = gt_img.resize((width, patch_size), Image.Resampling.LANCZOS)
 
     # 获取新的图像尺寸
     width, height = lr_img.size

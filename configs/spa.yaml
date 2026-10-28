@@ -1,0 +1,8 @@
+# Applied over configs/default.yaml by: python main.py configs/spa.yaml ...
+name: MSLKAD-SPA
+data:
+  train_data_root: datasets/SPA/train
+  val_data_root: datasets/SPA/test
+  test_data: SPA
+train:
+  max_iter: 400000

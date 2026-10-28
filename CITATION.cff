@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use MSLKAD in your research, please cite the ICIP 2026 paper below."
+type: software
+title: "MSLKAD: Multi-Scale Large Kernel Attention for Single-Image Deraining"
+url: "https://github.com/Easesgr/MSLKAD"
+authors:
+  - family-names: Zeng
+    given-names: Congcong
+  - family-names: Xu
+    given-names: Dan
+  - family-names: Zhu
+    given-names: Yinghui
+  - family-names: Pan
+    given-names: Jiangang
+  - family-names: He
+    given-names: Kangjian
+  - family-names: Shi
+    given-names: Hongzhen
+preferred-citation:
+  type: conference-paper
+  title: "Multi-Scale Large Kernel Attention for Single-Image Deraining"
+  authors:
+    - family-names: Zeng
+      given-names: Congcong
+    - family-names: Xu
+      given-names: Dan
+    - family-names: Zhu
+      given-names: Yinghui
+    - family-names: Pan
+      given-names: Jiangang
+    - family-names: He
+      given-names: Kangjian
+    - family-names: Shi
+      given-names: Hongzhen
+  collection-title: "IEEE International Conference on Image Processing (ICIP)"
+  year: 2026
+  notes: "Accepted. Proceedings page numbers and DOI are not included in this release."
+  url: "https://github.com/Easesgr/MSLKAD"

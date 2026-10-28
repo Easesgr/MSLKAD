@@ -1,5 +1,4 @@
 from torchvision import models
-from torch.autograd import Variable
 
 import torch
 import torch.nn as nn
@@ -9,74 +8,44 @@ def trainable_(net, trainable):
         param.requires_grad = trainable
 
 class PerceptualLoss(nn.Module):
+    """Historical mean VGG feature MSE, with gradients retained for predictions.
+
+    Inputs remain RGB in [0, 1], with no added ImageNet normalization, matching
+    the author's training code. Pretrained torchvision VGG19 weights are required.
+    """
+
     def __init__(self, device=None, model_path=None):
-        super(PerceptualLoss, self).__init__()
-        self.device = device
-
-        # 初始化 VGG19 网络结构
-        self.model = models.vgg19(pretrained=False).to(device)  # 不加载预训练权重
-
-        # 如果提供了本地路径，则加载权重
-        if model_path:
-            print(f"Loading pretrained VGG19 from {model_path}")
-            self.model.load_state_dict(torch.load(model_path))  # 从本地路径加载权重
-        else:
-            print("No model path provided, VGG19 weights will be initialized randomly")
-
-        # 设置模型为不可训练
-        trainable_(self.model, False)
-
-        # 损失函数
-        self.loss = nn.MSELoss().to(device)
-
-        # VGG19 的层
-        self.vgg_layers = self.model.features
+        super().__init__()
+        from pathlib import Path
+        if not model_path or not Path(model_path).expanduser().is_file():
+            raise FileNotFoundError(
+                'Training requires a local pretrained VGG19 state_dict; '
+                'set train.vgg_model_path=/path/to/vgg19-dcbb9e9d.pth.'
+            )
+        vgg = models.vgg19(weights=None)
+        vgg.load_state_dict(torch.load(Path(model_path).expanduser(), map_location='cpu', weights_only=True), strict=True)
+        # Only layers through index 11 contribute to the original loss.
+        self.vgg_layers = vgg.features[:12].to(device).eval()
+        trainable_(self.vgg_layers, False)
         self.layer_names = {'0': 'conv1_1', '3': 'relu1_2', '6': 'relu2_1', '8': 'relu2_2', '11': 'relu3_1'}
+        self.loss = nn.MSELoss()
 
     def get_layer_output(self, x):
-        output = []
+        outputs = []
         for name, module in self.vgg_layers._modules.items():
-            if isinstance(module, nn.ReLU):
-                module = nn.ReLU(inplace=False)
-            x = module(x)
+            x = F.relu(x, inplace=False) if isinstance(module, nn.ReLU) else module(x)
             if name in self.layer_names:
-                output.append(x)
-        return output
+                outputs.append(x)
+        return outputs
 
     def get_GTlayer_output(self, x):
         with torch.no_grad():
-            output = []
-            for name, module in self.vgg_layers._modules.items():
-                if isinstance(module, nn.ReLU):
-                    module = nn.ReLU(inplace=False)
-                x = module(x)
-                if name in self.layer_names:
-                    output.append(x)
-        return output
+            return self.get_layer_output(x)
 
-    def forward(self, O_, T_):
-        O_ = O_.to(self.device)
-        T_ = T_.to(self.device)
-        o = self.get_layer_output(O_)
-        t = self.get_GTlayer_output(T_)
-        loss_PL = sum(self.loss(o[i], t[i]) for i in range(len(t))) / len(t)
-        return loss_PL
-
-
-    def __call__(self, O_, T_):
-        o = self.get_layer_output(O_)
-        t = self.get_GTlayer_output(T_)
-        loss_PL = 0
-        for i in range(len(t)):
-            if i == 0:
-                loss_PL = self.loss(o[i], t[i])
-            else:
-                loss_PL += self.loss(o[i], t[i])
-
-        loss_PL = loss_PL / float(len(t))
-        loss_PL = Variable(loss_PL, requires_grad=True)
-
-        return loss_PL
+    def forward(self, output, target):
+        outputs = self.get_layer_output(output)
+        targets = self.get_GTlayer_output(target)
+        return sum(self.loss(o, t) for o, t in zip(outputs, targets)) / len(targets)
 
 
 class CharbonnierLoss(nn.Module):
@@ -97,9 +66,7 @@ class EdgeLoss(nn.Module):
         super(EdgeLoss, self).__init__()
         self.device = device
         k = torch.Tensor([[.05, .25, .4, .25, .05]])
-        self.kernel = torch.matmul(k.t(),k).unsqueeze(0).repeat(3,1,1,1)
-        if torch.cuda.is_available():
-            self.kernel = self.kernel.to(self.device)
+        self.register_buffer('kernel', torch.matmul(k.t(),k).unsqueeze(0).repeat(3,1,1,1).to(device))
         self.loss = CharbonnierLoss()
 
 
@@ -118,7 +85,7 @@ class EdgeLoss(nn.Module):
         return diff
 
     def forward(self, x, y):
-        loss = self.loss(self.laplacian_kernel(x.to(self.device)), self.laplacian_kernel(y.to(self.device)))
+        loss = self.loss(self.laplacian_kernel(x), self.laplacian_kernel(y))
         return loss
 
 
