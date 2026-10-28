@@ -10,7 +10,7 @@ Congcong Zeng · Dan Xu · Yinghui Zhu · Jiangang Pan · Kangjian He · Hongzhe
 
 云南大学 · 信息学院
 
-[论文 PDF](docs/paper/MSLKAD_ICIP2026.pdf) · [预训练权重](#预训练权重) · [快速使用](#快速使用) · [English](README.md)
+[论文页面](https://ieeexplore.ieee.org/document/11630367/) · [预训练权重](#预训练权重) · [快速使用](#快速使用) · [English](README.md)
 
 </div>
 
@@ -144,14 +144,11 @@ python main.py weights=./runs/RUN_NAME/latest.pt resume=true \
 @inproceedings{zeng2026mslkad,
   title     = {Multi-Scale Large Kernel Attention for Single-Image Deraining},
   author    = {Zeng, Congcong and Xu, Dan and Zhu, Yinghui and Pan, Jiangang and He, Kangjian and Shi, Hongzhen},
-  booktitle = {IEEE International Conference on Image Processing (ICIP)},
+  booktitle = {2026 IEEE International Conference on Image Processing (ICIP)},
   year      = {2026},
-  note      = {Accepted}
+  pages     = {1--6},
+  publisher = {IEEE},
+  doi       = {10.1109/ICIP61757.2026.11630367},
+  url       = {https://ieeexplore.ieee.org/document/11630367/}
 }
 ```
-
-## 致谢与联系
-
-感谢 [MAN](https://github.com/icandle/MAN) 和 [VAN](https://github.com/Visual-Attention-Network) 的组件实现，许可说明见[第三方声明](THIRD_PARTY_NOTICES.md)。
-
-通讯作者：**Hongzhen Shi**，邮箱：[hongzhen.shi@ynu.edu.cn](mailto:hongzhen.shi@ynu.edu.cn)。代码问题请在 [Issues](https://github.com/Easesgr/MSLKAD/issues) 中反馈。

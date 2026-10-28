@@ -32,7 +32,7 @@ preferred-citation:
       given-names: Kangjian
     - family-names: Shi
       given-names: Hongzhen
-  collection-title: "IEEE International Conference on Image Processing (ICIP)"
+  collection-title: "2026 IEEE International Conference on Image Processing (ICIP)"
   year: 2026
-  notes: "Accepted. Proceedings page numbers and DOI are not included in this release."
-  url: "https://github.com/Easesgr/MSLKAD"
+  doi: "10.1109/ICIP61757.2026.11630367"
+  url: "https://ieeexplore.ieee.org/document/11630367/"

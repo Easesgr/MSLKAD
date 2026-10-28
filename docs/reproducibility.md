@@ -1,23 +1,23 @@
 # Implementation and reproducibility
 
-This release combines the supplied author model implementation with the repository's training code. The [paper](paper/MSLKAD_ICIP2026.pdf) and [figures](../assets/README.md) describe the original experiments. The release checks validate code execution; they do not constitute a fresh reproduction of the six benchmark results.
+This release combines the supplied author model implementation with the repository's training code. The [paper](https://ieeexplore.ieee.org/document/11630367/) and [figures](../assets/README.md) describe the original experiments. The release checks validate code execution; they do not constitute a fresh reproduction of the six benchmark results.
 
 ## Architecture
 
 The released model preserves the supplied source's parameter names and computation, including the additional residual connection after every two MFABs. The default configuration has **4 groups × 9 blocks × 180 channels**.
 
-Some manuscript labels differ from the source:
+Some labels in the author-provided figure differ from the source:
 
-| Item | Manuscript | Supplied model source |
+| Item | Supplied figure | Supplied model source |
 | :--- | :--- | :--- |
 | GKG depthwise kernel in Fig. 1 | 3 × 3 | 7 × 7 |
 | EKA dilated convolution in Fig. 1 | Dilation 4 | Dilation 3 |
 
-The code follows the supplied source for these settings. The paper images and reported values are retained as provided. Changing these settings to match the schematic can break compatibility with the supplied model and its checkpoints.
+The code follows the supplied source for these settings. The figures are retained as provided. Changing these settings to match the schematic can break compatibility with the supplied model and its checkpoints.
 
 ## Dataset labels and pairing
 
-Table 1 uses **Rain200L/H**, while the synthetic comparison caption and the ablation tables use **Rain100L/H**. The README retains the labels of the source figures. These names should not be treated as equivalent test splits.
+The original code names its configurations and pretrained models **Rain200L/H**, while the author-provided synthetic comparison caption uses **Rain100L/H**. The README retains these source labels. These names should not be treated as equivalent test splits.
 
 Training and paired evaluation match rainy and clean images by **filename stem**. Extensions may differ, but each stem must occur exactly once in each directory. Rename files or prepare a separate paired directory if a dataset uses different rainy/clean naming conventions. Missing images, duplicate stems and mismatched dimensions are errors.
 
@@ -30,7 +30,7 @@ Training and paired evaluation match rainy and clean images by **filename stem**
 - A local ImageNet-pretrained torchvision VGG19 state dict is required for training. Inference does not initialize VGG19.
 - The provided trainer uses one process with `torch.nn.DataParallel` for multiple CUDA GPUs. Run it with `python main.py` and a GPU list; there is no DDP launcher in this release.
 
-The manuscript describes an L1 perceptual constraint, while the historical training implementation averages **MSE** over its selected VGG19 features. The release retains that implementation's loss definition. Its edge loss uses a Laplacian pyramid with a Charbonnier penalty. A detached `Variable` wrapper in the original perceptual loss has been removed so that this loss contributes gradients to the deraining model.
+The historical training implementation averages **MSE** over its selected VGG19 features. The release retains that implementation's loss definition. Its edge loss uses a Laplacian pyramid with a Charbonnier penalty. A detached `Variable` wrapper in the original perceptual loss has been removed so that this loss contributes gradients to the deraining model.
 
 ## Evaluation protocol
 

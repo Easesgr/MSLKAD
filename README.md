@@ -10,11 +10,11 @@ Congcong Zeng · Dan Xu · Yinghui Zhu · Jiangang Pan · Kangjian He · Hongzhe
 
 School of Information Science and Engineering, Yunnan University
 
-[![ICIP 2026](https://img.shields.io/badge/ICIP_2026-Accepted-147d64)](docs/paper/MSLKAD_ICIP2026.pdf)
+[![ICIP 2026](https://img.shields.io/badge/ICIP_2026-Accepted-147d64)](https://ieeexplore.ieee.org/document/11630367/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-Implementation-EE4C2C?logo=pytorch&logoColor=white)](model/MSLKAD.py)
-[![Paper](https://img.shields.io/badge/Paper-PDF-3b657a)](docs/paper/MSLKAD_ICIP2026.pdf)
+[![Paper](https://img.shields.io/badge/Paper-IEEE_Xplore-3b657a)](https://ieeexplore.ieee.org/document/11630367/)
 
-[Paper](docs/paper/MSLKAD_ICIP2026.pdf) · [Pretrained models](#pretrained-models) · [Quick start](#quick-start) · [中文说明](README_zh-CN.md)
+[Paper](https://ieeexplore.ieee.org/document/11630367/) · [Pretrained models](#pretrained-models) · [Quick start](#quick-start) · [中文说明](README_zh-CN.md)
 
 </div>
 
@@ -154,7 +154,7 @@ Checkpoints and logs are written under `runs/`. For a CPU smoke run, add `sys.cp
 | [`configs/`](configs/) | Portable training configurations |
 | [`data/`](data/), [`loss/`](loss/), [`util/`](util/) | Paired datasets, losses, metrics and checkpoint utilities |
 | [`assets/`](assets/) | Architecture and visual comparisons in PNG/PDF |
-| [`docs/paper/`](docs/paper/) | Author manuscript and citation |
+| [`docs/paper/`](docs/paper/) | Published paper link and citation |
 | [`tests/`](tests/) | Focused release checks |
 
 ## Citation
@@ -165,14 +165,11 @@ If MSLKAD is useful in your research, please cite:
 @inproceedings{zeng2026mslkad,
   title     = {Multi-Scale Large Kernel Attention for Single-Image Deraining},
   author    = {Zeng, Congcong and Xu, Dan and Zhu, Yinghui and Pan, Jiangang and He, Kangjian and Shi, Hongzhen},
-  booktitle = {IEEE International Conference on Image Processing (ICIP)},
+  booktitle = {2026 IEEE International Conference on Image Processing (ICIP)},
   year      = {2026},
-  note      = {Accepted}
+  pages     = {1--6},
+  publisher = {IEEE},
+  doi       = {10.1109/ICIP61757.2026.11630367},
+  url       = {https://ieeexplore.ieee.org/document/11630367/}
 }
 ```
-
-## Acknowledgments and contact
-
-We acknowledge [MAN](https://github.com/icandle/MAN) and [VAN](https://github.com/Visual-Attention-Network) for their component implementations. See [third-party notices](THIRD_PARTY_NOTICES.md).
-
-Corresponding author: **Hongzhen Shi**, [hongzhen.shi@ynu.edu.cn](mailto:hongzhen.shi@ynu.edu.cn). For questions about the code, please [open an issue](https://github.com/Easesgr/MSLKAD/issues).
